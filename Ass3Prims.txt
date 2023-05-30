@@ -1,0 +1,46 @@
+# Prims Algorithm
+
+import sys
+
+def prim(graph):
+    num_vertices = len(graph)
+    visited = [False] * num_vertices
+    min_weights = [sys.maxsize] * num_vertices  
+    parent = [None] * num_vertices  
+    min_weights[0] = 0  
+
+    for _ in range(num_vertices):
+        min_weight = sys.maxsize
+        min_vertex = -1
+
+        for v in range(num_vertices):
+            if not visited[v] and min_weights[v] < min_weight:
+                min_weight = min_weights[v]
+                min_vertex = v
+
+        visited[min_vertex] = True
+
+        for v in range(num_vertices):
+            if (
+                not visited[v]
+                and graph[min_vertex][v] != 0
+                and graph[min_vertex][v] < min_weights[v]
+            ):
+                min_weights[v] = graph[min_vertex][v]
+                parent[v] = min_vertex
+
+    return parent
+
+
+num_vertices = int(input("Enter the number of vertices: "))
+graph = [[0] * num_vertices for _ in range(num_vertices)]
+for i in range(num_vertices):
+    for j in range(num_vertices):
+        graph[i][j] = int(input(f"Enter the weight between vertex {i} and {j}: "))
+
+mst = prim(graph)
+
+
+print("Minimal Spanning Tree:")
+for i in range(1, num_vertices):
+    print(f"{mst[i]} - {i}    weight: {graph[i][mst[i]]}")
